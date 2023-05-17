@@ -6,7 +6,7 @@ from streamlit_option_menu import option_menu
 import gspread
 
 # --- LOAD SHEET ---
-gc = gspread.service_account(filename='italian-386920-b9876b5e503f.json')
+gc = gspread.service_account(st.secrets.db_credentials)
 ws = gc.open("ItalianEats").worksheet("Sheet1")
 
 # ------------ SETTINGS -------------
