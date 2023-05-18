@@ -7,6 +7,11 @@ import gspread
 import pandas as pd
 
 # --- LOAD SHEET ---
+sheet_id = st.secrets.sheet_id
+sheet_name = st.secrets.sheet_name
+url = f"<https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}>"
+df = pd.read_csv(url, dtype=str).fillna("")
+st.write(df)
 
 # ------------ SETTINGS -------------
 page_icon = ":spaghetti:"
