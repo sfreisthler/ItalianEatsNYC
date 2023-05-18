@@ -7,11 +7,11 @@ import gspread
 import pandas as pd
 
 # --- LOAD SHEET ---
-sheet_id = st.secrets.sheet_id
-sheet_name = "Sheet1"
-url = f"<https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}>"
-df = pd.read_csv(url, dtype=str).fillna("")
-st.write(df)
+SHEET_ID = st.secrets.sheet_id
+SHEET_NAME = "Sheet1"
+url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
+df = pd.read_csv(url)
+print(df.head())
 
 # ------------ SETTINGS -------------
 page_icon = ":spaghetti:"
