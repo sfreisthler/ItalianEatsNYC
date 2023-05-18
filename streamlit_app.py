@@ -4,10 +4,9 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 
 import gspread
+import pandas as pd
 
 # --- LOAD SHEET ---
-gc = gspread.service_account(st.secrets.db_credentials)
-ws = gc.open("ItalianEats").worksheet("Sheet1")
 
 # ------------ SETTINGS -------------
 page_icon = ":spaghetti:"
@@ -57,8 +56,6 @@ if selected == "Data Entry":
     
         submitted = st.form_submit_button("Save Data")
         if submitted:
-            data = [name,address]
-            ws.append_row(data)
             st.success("Data saved!")
             st.balloons()
 
