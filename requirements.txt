@@ -2,3 +2,4 @@ streamlit==1.10.0
 streamlit_option_menu==0.3.2
 gspread==5.7.2
 folium==0.14.0
+streamlit_folium==0.11.1
