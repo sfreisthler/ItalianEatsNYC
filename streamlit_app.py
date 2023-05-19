@@ -40,6 +40,9 @@ creds = {
 # --- Load Spreadsheet ---
 gc = gspread.service_account_from_dict(creds)
 ws = gc.open("ItalianEats").worksheet("Sheet1")
+data = ws.get_all_values()
+headers = data.pop(0)
+df = pd.DataFrame(data, columns=headers)
 
 
 def query_address(address):
@@ -78,8 +81,8 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 # --- NAVIGATION MENU ---
 selected = option_menu(
     menu_title=None,
-    options=["Data Entry", "Data Visualization"],
-    icons=["pencil-fill", "bar-chart-fill"],
+    options=["Data Entry", "Data Visualization", "Data"],
+    icons=["pencil-fill", "bar-chart-fill","list-ol"],
     orientation="horizontal",
 )
 
@@ -115,9 +118,6 @@ if selected == "Data Entry":
             st.success("Data saved!")
             st.balloons()
 elif selected == "Data Visualization":
-    data = ws.get_all_values()
-    headers = data.pop(0)
-    df = pd.DataFrame(data, columns=headers)
     m = folium.Map(location=[40.7826, -73.9656], zoom_start=13)
     for restaurant in range(0,len(df)):
         folium.Marker (
@@ -125,7 +125,9 @@ elif selected == "Data Visualization":
             popup=df.iloc[restaurant]['Name'],
             icon=folium.Icon(color="red"),
         ).add_to(m)
-    folium.TileLayer('stamenwatercolor').add_to(m)
+    folium.TileLayer('stamentoner').add_to(m)
     st_data = st_folium(m, width=725)
+elif selected == "Data":
+    st.dataframe(df)
 
 
