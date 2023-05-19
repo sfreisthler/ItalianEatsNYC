@@ -128,6 +128,7 @@ elif selected == "Data Visualization":
     folium.TileLayer('stamentoner').add_to(m)
     st_data = st_folium(m, width=725)
 elif selected == "Data":
-    st.dataframe(df)
+    df1 = df.drop(['lat','lon'], axis=1)
+    st.dataframe(df1)
 
 
