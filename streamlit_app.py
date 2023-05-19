@@ -1,6 +1,5 @@
 from datetime import date
 import folium
-from folium.plugins import MarkerCluster
 import requests
 
 import streamlit as st
@@ -10,7 +9,7 @@ from streamlit_folium import st_folium
 import gspread
 import pandas as pd
 
-# --- LOAD SHEET ---
+# --- LOAD SECRETS ---
 type = st.secrets.type
 project_id=st.secrets.project_id
 private_key_id=st.secrets.private_key_id
@@ -37,13 +36,21 @@ creds = {
     "universe_domain":universe_domain
 }
 
-# --- Load Spreadsheet ---
-gc = gspread.service_account_from_dict(creds)
-ws = gc.open("ItalianEats").worksheet("Sheet1")
-data = ws.get_all_values()
-headers = data.pop(0)
-df = pd.DataFrame(data, columns=headers)
+# ------------ SETTINGS -------------
+page_icon = ":spaghetti:"
+page_title = "Italian Eats NYC"
+layout = "centered"
+#------------------------------------
 
+st.set_page_config(page_title=page_title, page_icon=page_icon, layout=layout)
+st.title(page_title + " " + page_icon)
+
+@st.cache_resource
+def load_sheet(creds):
+    gc = gspread.service_account_from_dict(creds)
+    ws = gc.open("ItalianEats").worksheet("Sheet1")
+    return ws
+    
 
 def query_address(address):
     url = "https://nominatim.openstreetmap.org/search"
@@ -57,14 +64,12 @@ def query_address(address):
         result = response.json()
     return result
 
-# ------------ SETTINGS -------------
-page_icon = ":spaghetti:"
-page_title = "Italian Eats NYC"
-layout = "centered"
-#------------------------------------
+# --- Load Spreadsheet ---
+ws = load_sheet(creds)
+data = ws.get_all_values()
+headers = data.pop(0)
+df = pd.DataFrame(data, columns=headers)
 
-st.set_page_config(page_title=page_title, page_icon=page_icon, layout=layout)
-st.title(page_title + " " + page_icon)
 
 completion_date = date.today()
 
@@ -130,5 +135,6 @@ elif selected == "Data Visualization":
 elif selected == "Data":
     df1 = df.drop(['lat','lon'], axis=1)
     st.dataframe(df1)
+    
 
 
